@@ -75,3 +75,15 @@ resource "aws_subnet" "dbplayer2_private" {
         Name = "DBLayer2private"
     }
 }
+
+resource "aws_internet_gateway" "igw" {
+    vpc_id = aws_vpc.sysops_vpc.id
+
+    tags = {
+        Name = "IGW"
+    }
+}
+
+resource "aws_nat_gateway" "ngw" {
+    
+}
