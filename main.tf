@@ -6,4 +6,4 @@ resource "aws_vpc" "sysops_vpc" {
     tags = {
         Name = "SysOpsVPC"
     }
-} 
+}
