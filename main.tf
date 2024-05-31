@@ -85,5 +85,10 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_nat_gateway" "ngw" {
+    subnet_id = aws_subnet.dmz2_public.id
+    connectivity_type = "public"
     
+    tags = {
+        Name = 'NGW'
+    }
 }
