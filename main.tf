@@ -111,7 +111,7 @@ resource "aws_route_table" "private_rt" {
 resource "aws_route" "route_igw" {
   route_table_id         = aws_route_table.public_rt.id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id             = aws_internet_gateway.igw
+  gateway_id             = aws_internet_gateway.igw.id
 }
 
 resource "aws_route" "route_ngw" {
