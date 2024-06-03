@@ -92,3 +92,60 @@ resource "aws_nat_gateway" "ngw" {
     Name = "NGW"
   }
 }
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.sysops_vpc.id
+
+  tags = {
+    Name = "PublicRT"
+  }
+}
+
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.sysops_vpc.id
+  tags = {
+    Name = "PrivateRT"
+  }
+}
+
+resource "aws_route" "route_igw" {
+  route_table_id         = aws_route_table.public_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw
+}
+
+resource "aws_route" "route_ngw" {
+  route_table_id         = aws_route_table.private_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_nat_gateway.ngw.id
+}
+
+resource "aws_route_table_association" "dmz1_association" {
+  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.dmz1_public.id
+}
+
+resource "aws_route_table_association" "dmz2_association" {
+  route_table_id = aws_route_table.public_rt.id
+  subnet_id      = aws_subnet.dmz2_public.id
+}
+
+resource "aws_route_table_association" "applayer1_association" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.applayer1_private.id
+}
+
+resource "aws_route_table_association" "applayer2_association" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.applayer2_private.id
+}
+
+resource "aws_route_table_association" "dblayer1_association" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.dbplayer1_private.id
+}
+
+resource "aws_route_table_association" "dblayer2_association" {
+  route_table_id = aws_route_table.private_rt.id
+  subnet_id      = aws_subnet.dbplayer2_private.id
+}
