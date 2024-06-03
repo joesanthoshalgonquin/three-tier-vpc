@@ -154,3 +154,58 @@ resource "aws_route_table_association" "dblayer2_association" {
   route_table_id = aws_route_table.private_rt.id
   subnet_id      = aws_subnet.dbplayer2_private.id
 }
+
+resource "aws_network_acl" "dmz_nacl" {
+  vpc_id = aws_vpc.sysops_vpc.id
+
+  tags = {
+    Name = "DMZNACL"
+  }
+}
+
+resource "aws_network_acl" "app_nacl" {
+  vpc_id = aws_vpc.sysops_vpc.id
+
+  tags = {
+    Name = "APPNACL"
+  }
+}
+
+resource "aws_network_acl" "db_nacl" {
+  vpc_id = aws_vpc.sysops_vpc.id
+
+  tags = {
+    Name = "DBNACL"
+  }
+}
+
+resource "aws_network_acl_association" "dmz1_association" {
+  network_acl_id = aws_network_acl.dmz_nacl.id
+  subnet_id      = aws_subnet.dmz1_public.id
+}
+
+resource "aws_network_acl_association" "dmz2_association" {
+  network_acl_id = aws_network_acl.dmz_nacl.id
+  subnet_id      = aws_subnet.dmz2_public.id
+}
+
+resource "aws_network_acl_association" "applayer1_association" {
+  network_acl_id = aws_network_acl.app_nacl.id
+  subnet_id      = aws_subnet.applayer1_private.id
+}
+
+resource "aws_network_acl_association" "applayer2_association" {
+  network_acl_id = aws_network_acl.app_nacl.id
+  subnet_id      = aws_subnet.applayer2_private.id
+}
+
+
+resource "aws_network_acl_association" "dblayer1_association" {
+  network_acl_id = aws_network_acl.app_nacl.id
+  subnet_id      = aws_subnet.dbplayer1_private.id
+}
+
+resource "aws_network_acl_association" "dblayer2_association" {
+  network_acl_id = aws_network_acl.app_nacl.id
+  subnet_id      = aws_subnet.dbplayer2_private.id
+}
