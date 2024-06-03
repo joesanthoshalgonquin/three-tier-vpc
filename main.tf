@@ -14,7 +14,7 @@ resource "aws_vpc" "sysops_vpc" {
 resource "aws_subnet" "dmz1_public" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.1.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-2a"
 
   tags = {
     Name = "DMZ1public"
@@ -25,7 +25,7 @@ resource "aws_subnet" "dmz1_public" {
 resource "aws_subnet" "dmz2_public" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.2.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "us-east-2b"
 
   tags = {
     Name = "DMZ2public"
@@ -36,7 +36,7 @@ resource "aws_subnet" "dmz2_public" {
 resource "aws_subnet" "applayer1_private" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.11.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-2a"
 
   tags = {
     Name = "AppLayer1private"
@@ -47,7 +47,7 @@ resource "aws_subnet" "applayer1_private" {
 resource "aws_subnet" "applayer2_private" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.12.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "us-east-2b"
 
   tags = {
     Name = "AppLayer2private"
@@ -58,7 +58,7 @@ resource "aws_subnet" "applayer2_private" {
 resource "aws_subnet" "dbplayer1_private" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.21.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-2a"
 
   tags = {
     Name = "DBLayer1private"
@@ -69,7 +69,7 @@ resource "aws_subnet" "dbplayer1_private" {
 resource "aws_subnet" "dbplayer2_private" {
   vpc_id            = aws_vpc.sysops_vpc.id
   cidr_block        = "10.99.22.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "us-east-2b"
 
   tags = {
     Name = "DBLayer2private"
@@ -84,9 +84,14 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
+resource "aws_eip" "eip" {
+  domain = "vpc"
+}
+
 resource "aws_nat_gateway" "ngw" {
   subnet_id         = aws_subnet.dmz2_public.id
   connectivity_type = "public"
+  allocation_id     = aws_eip.eip.id
 
   tags = {
     Name = "NGW"
