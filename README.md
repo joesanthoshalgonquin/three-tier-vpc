@@ -3,6 +3,9 @@
 Terraform code to build 3 tier network VPC from scratch.
 Contains 1 VPC, 2 public subnets, 4 private subnets, internet gateway, nat gateway, route tables, network access controls.
 
+## Diagram
+![plot](./images/diagram-three-tier.png)
+
 ## Subnet Associations on Route Table
 
 ![plot](./images/subnet-route-table-associations.png)
